@@ -1,12 +1,13 @@
 # Copyright The OpenTelemetry Authors
 # SPDX-License-Identifier: Apache-2.0
+name: Build Components Images
 
 on:
   workflow_call:
     inputs:
       push:
         description: Should the images be pushed
-        default: false
+        default: true
         required: false
         type: boolean
       version:
@@ -142,28 +143,28 @@ jobs:
             echo ".env file not found!"
             exit 1
           fi
-      - name: Check for changes and set push options
-        id: check_changes
-        run: |
-          DOCKERFILE_DIR=$(dirname ${{ matrix.file_tag.file }})
-          FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $DOCKERFILE_DIR)
-          FORCE_PUSH=${{ inputs.push }}
-          if [ "$FORCE_PUSH" = true ]; then
-            echo "Force push is enabled, proceeding with build."
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          elif [ -z "$FILES_CHANGED" ]; then
-            echo "No changes in ${{ matrix.file_tag.context }}, skipping build."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "Changes detected in ${{ matrix.file_tag.context }}, proceeding with build."
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
+      # - name: Check for changes and set push options
+        # id: check_changes
+        # run: |
+        #   DOCKERFILE_DIR=$(dirname ${{ matrix.file_tag.file }})
+        #   FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $DOCKERFILE_DIR)
+        #   FORCE_PUSH=${{ inputs.push }}
+        #   if [ "$FORCE_PUSH" = true ]; then
+        #     echo "Force push is enabled, proceeding with build."
+        #     echo "skip=false" >> "$GITHUB_OUTPUT"
+        #   elif [ -z "$FILES_CHANGED" ]; then
+        #     echo "No changes in ${{ matrix.file_tag.context }}, skipping build."
+        #     echo "skip=true" >> "$GITHUB_OUTPUT"
+        #   else
+        #     echo "Changes detected in ${{ matrix.file_tag.context }}, proceeding with build."
+        #     echo "skip=false" >> "$GITHUB_OUTPUT"
+        #   fi
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACCESS_TOKEN }}
         if: ${{ inputs.push }}
       - name: Set up QEMU
         if: ${{ matrix.file_tag.setup-qemu }}
@@ -177,7 +178,7 @@ jobs:
             [worker.oci]
             max-parallelism = 2
       - name: Matrix Build and push demo images
-        if: steps.check_changes.outputs.skip == 'false'
+        # if: steps.check_changes.outputs.skip == 'false'
         uses: docker/build-push-action@v6.15.0
         with:
           context: ${{ matrix.file_tag.context }}
