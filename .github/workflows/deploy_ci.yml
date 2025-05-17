@@ -7,51 +7,51 @@ on:
     # EKS_CLUSTER_NAME: 
     # AWS_REGION: us-west-2
 
-  jobs:
-    build_images:
-      uses: ./.github/workflows/component-build-images.yml
-      # name: Build Docker Image
-      # runs-on: ubuntu-latest
-      # steps:
-      # - name: Set short commit SHA
-      #   id: commit
-      #   uses: prompt/actions-commit-hash@v2
-      
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
-      
-      # - name: Congifure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{env.AWS_REGION}}
+jobs:
+  build_images:
+    uses: ./.github/workflows/component-build-images.yml
+    # name: Build Docker Image
+    # runs-on: ubuntu-latest
+    # steps:
+    # - name: Set short commit SHA
+    #   id: commit
+    #   uses: prompt/actions-commit-hash@v2
+    
+    # - name: Checkout code
+    #   uses: actions/checkout@v2
+    
+    # - name: Congifure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{env.AWS_REGION}}
 
-      # - name: Log into the Github Container Registry
-      #   uses: docker/login-action@v3
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.repository_owner }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-      
-      # - name: Build, tag, and push image to GitHub Container Registry
-      #   run: |
-      #     docker build 
-      #     docker push 
-    test:
-      needs: build
-      uses: ./.github/workflows/run-integration-tests.yml
+    # - name: Log into the Github Container Registry
+    #   uses: docker/login-action@v3
+    #   with:
+    #     registry: ghcr.io
+    #     username: ${{ github.repository_owner }}
+    #     password: ${{ secrets.GITHUB_TOKEN }}
+    
+    # - name: Build, tag, and push image to GitHub Container Registry
+    #   run: |
+    #     docker build 
+    #     docker push 
+  test:
+    needs: build
+    uses: ./.github/workflows/run-integration-tests.yml
 
-    # deploy:
-    #   runs-on: ubuntu-latest
-    #   needs: test
-    #   steps:
-    #   - name: Update kube config
-    #   - run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #   - name: Update kube config
+  #   - run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
-    #   - name: Deploy to EKS
-    #     env:
-    #     run: |
-    #       sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" manifests/hello-app-deployment.yaml && \
-    #       kubectl apply -f kubernetes/opentelemetry-demo.yaml
+  #   - name: Deploy to EKS
+  #     env:
+  #     run: |
+  #       sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" manifests/hello-app-deployment.yaml && \
+  #       kubectl apply -f kubernetes/opentelemetry-demo.yaml
 
