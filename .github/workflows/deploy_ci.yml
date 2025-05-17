@@ -2,7 +2,7 @@ name: Deploy OpenTelemetry Demo to EKS
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   # env:
     # EKS_CLUSTER_NAME: 
     # AWS_REGION: us-west-2
