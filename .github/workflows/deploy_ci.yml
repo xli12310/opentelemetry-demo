@@ -60,5 +60,5 @@ jobs:
       - name: Deploy to EKS
         # env:
         run: |
-          kubectl apply -f opentelemetry-demo/kubernetes/opentelemetry-demo.yaml
+          kubectl apply -f ${{ github.workspace }}/opentelemetry-demo/kubernetes/opentelemetry-demo.yaml
 
