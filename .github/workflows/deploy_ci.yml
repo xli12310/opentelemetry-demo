@@ -14,9 +14,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: 
-      - job: test
-      - job: build
+    needs: [test, build]
     env:
       EKS_CLUSTER_NAME: ENPM818-final-proj-cluster-uw2
       AWS_REGION: us-west-2
