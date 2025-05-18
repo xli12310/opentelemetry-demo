@@ -59,8 +59,16 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
+      - name: Check pods pre-deployment
+        run: |
+          kubectl get pods
+
       - name: Deploy to EKS
-        # env:
         run: |
           kubectl apply -f ./kubernetes/opentelemetry-demo.yaml
+      
+      - name: Check pods after-deployment
+        run: |
+          kubectl get pods
+
 
