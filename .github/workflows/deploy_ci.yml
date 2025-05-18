@@ -62,6 +62,5 @@ jobs:
       - name: Deploy to EKS
         # env:
         run: |
-          echo kubectl version
-          kubectl apply -f opentelemetry-demo.yaml
+          kubectl apply -f ./kubernetes/opentelemetry-demo.yaml
 
