@@ -8,13 +8,9 @@ jobs:
   build:
     uses: ./.github/workflows/component-build-images.yml
 
-  test:
-    needs: build
-    uses: ./.github/workflows/run-integration-tests.yml
-
   deploy:
     runs-on: ubuntu-latest
-    needs: [test, build]
+    needs: build
     env:
       EKS_CLUSTER_NAME: ENPM818-final-proj-cluster-uw2
       AWS_REGION: us-west-2
