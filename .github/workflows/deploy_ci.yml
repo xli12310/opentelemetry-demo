@@ -3,9 +3,6 @@ name: Deploy OpenTelemetry Demo to EKS
 on:
   push:
     branches: [ main ]
-  env:
-    EKS_CLUSTER_NAME: ENPM818-final-proj-cluster-uw2
-    AWS_REGION: us-west-2
 
 jobs:
   # build:
@@ -45,6 +42,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # needs: build
+    env:
+      EKS_CLUSTER_NAME: ENPM818-final-proj-cluster-uw2
+      AWS_REGION: us-west-2
+
     steps:
       - name: Congifure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
