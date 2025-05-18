@@ -47,6 +47,8 @@ jobs:
       AWS_REGION: us-west-2
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Congifure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
